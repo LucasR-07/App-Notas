@@ -1,13 +1,34 @@
 const notesCtrl = {};
 
-notesCtrl.getNotes = (req, res) => res.json({ message: {} });
+const NoteModel = require("../models/Note");
+const Note = require("../models/Note");
 
-notesCtrl.getNote = (req, res) => res.json({ title: "nota test" });
+notesCtrl.getNotes = async (req, res) => {
+  const notes = await Note.find();
+  res.json(notes);
+};
 
-notesCtrl.createNote = (req, res) => res.json({ message: "Note Created" });
+notesCtrl.getNote = async (req, res) => {
+  const note = await Note.findById(req.params.id);
+  res.json(note);
+};
 
+notesCtrl.createNote = async (req, res) => {
+  const { title, content, date, author } = req.body;
+  const newNote = new Note({
+    title,
+    content,
+    date,
+    author,
+  });
+  await newNote.save();
+  res.json({ message: "Note saved" });
+};
 notesCtrl.updateNote = (req, res) => res.json({ message: "Note Update" });
 
-notesCtrl.deleteNote = (req, res) => res.json({ message: "Note Eliminated" });
+notesCtrl.deleteNote = async (req, res) => {
+    await Note.findByIdAndDelete(req.params.id)
+    res.json({ message: "Note Eliminated" });
+};
 
 module.exports = notesCtrl;
