@@ -24,11 +24,22 @@ notesCtrl.createNote = async (req, res) => {
   await newNote.save();
   res.json({ message: "Note saved" });
 };
-notesCtrl.updateNote = (req, res) => res.json({ message: "Note Update" });
+
+notesCtrl.updateNote = async (req, res) => {
+  console.log(req.body)
+  const { title, author, content } = req.body;
+  await Note.findByIdAndUpdate(req.params.id, {
+    title,
+    author,
+    content
+  });
+
+  res.json({ message: "Note Update" });
+};
 
 notesCtrl.deleteNote = async (req, res) => {
-    await Note.findByIdAndDelete(req.params.id)
-    res.json({ message: "Note Eliminated" });
+  await Note.findByIdAndDelete(req.params.id);
+  res.json({ message: "Note Eliminated" });
 };
 
 module.exports = notesCtrl;
