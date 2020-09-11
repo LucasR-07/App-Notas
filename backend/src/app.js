@@ -1,11 +1,13 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const morgan = require("morgan");
 
 // settings
 app.set("port", process.env.PORT || 4000);
 
 // middlewares
+app.use(morgan("dev"));
 app.use(cors()); // permite comunicacion entre dos servers
 app.use(express.json()); // El server entendera json
 
