@@ -7,6 +7,7 @@ import Navigation from "./components/Navigation";
 import NotesList from "./components/NotesList";
 import CreateNote from "./components/CreateNote";
 import CreateUser from "./components/CreateUser";
+import EditNote from "./components/EditNote";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
 
         <div className="container p-4">
           <Route path="/" exact component={NotesList} />
-          <Route path="/edit/:id" component={CreateNote} />
+          <Route path="/notes/:id" component={EditNote} />
           <Route path="/create" component={CreateNote} />
           <Route path="/user" component={CreateUser} />
         </div>

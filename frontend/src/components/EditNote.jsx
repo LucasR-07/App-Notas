@@ -3,9 +3,9 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export class CreateNote extends Component {
+export default class EditNote extends Component {
   state = {
-    _id: '',
+    _id: "",
     users: [],
     userSelected: "",
     title: "",
@@ -19,19 +19,35 @@ export class CreateNote extends Component {
       users: res.data,
       userSelected: res.data[0].username,
     });
+
+    if (this.props.match.params.id) {
+      const res = await axios.get(
+        "http://localhost:4000/api/notes/" + this.props.match.params.id
+      );
+      this.setState({
+        title: res.data.title,
+        content: res.data.content,
+        date: new Date(res.data.date),
+        author: res.data.author,
+        _id: this.props.match.params.id,
+      });
+    }
   }
 
   handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newNote = {
+    const editNote = {
       title: this.state.title,
       content: this.state.content,
       date: this.state.date,
       author: this.state.userSelected,
     };
 
-    await axios.post("http://localhost:4000/api/notes", newNote);
+    await axios.put(
+      "http://localhost:4000/api/notes/" + this.state._id,
+      editNote
+    );
 
     window.location.href = "/";
   };
@@ -50,7 +66,7 @@ export class CreateNote extends Component {
     return (
       <div className="col-md-6 offset-md-3">
         <div className="card card-body">
-          <h4>Create a Note</h4>
+          <h4>Edit Note</h4>
 
           {/* Select User */}
 
@@ -116,5 +132,3 @@ export class CreateNote extends Component {
     );
   }
 }
-
-export default CreateNote;
